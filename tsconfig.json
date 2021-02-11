@@ -34,6 +34,10 @@
       ],
       "@root-store/*": [
         "src/app/root-store/*"
+      ],
+      "ngrx-aigor": [
+        "dist/ngrx-aigor/ngrx-aigor",
+        "dist/ngrx-aigor"
       ]
     }
   },
