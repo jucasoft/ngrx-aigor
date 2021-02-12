@@ -6,6 +6,8 @@
     "start": "node server.js",
     "start:dev": "ng serve --proxy-config proxy.conf.js",
     "build": "ng build --aot --prod",
+    "build:lib:prod": "ng build ngrx-aigor --prod",
+    "build:lib:watch": "ng build ngrx-aigor --watch",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

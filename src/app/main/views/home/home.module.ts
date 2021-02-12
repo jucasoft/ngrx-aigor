@@ -7,19 +7,21 @@ import {PanelModule} from 'primeng/panel';
 import {CardModule} from 'primeng/card';
 import {ButtonModule} from 'primeng/button';
 import {RippleModule} from 'primeng/ripple';
+import {NgrxAigorModule} from 'ngrx-aigor';
 
 @NgModule({
   declarations: [HomeMainComponent],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    HomeRoutingModule,
-    PanelModule,
-    CardModule,
-    ButtonModule,
-    RippleModule
-  ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HomeRoutingModule,
+        PanelModule,
+        CardModule,
+        ButtonModule,
+        RippleModule,
+        NgrxAigorModule
+    ],
   providers: [],
   entryComponents: []
 })
