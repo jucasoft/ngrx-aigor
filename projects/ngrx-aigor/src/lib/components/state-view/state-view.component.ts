@@ -24,7 +24,7 @@ export class StateViewComponent implements OnInit {
   navi;
 
   editorOptions = {
-    theme: 'vs-dark',
+    // theme: 'vs-dark',
     language: 'json'
   };
 

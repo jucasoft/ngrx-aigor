@@ -25,7 +25,7 @@ export class StateDiffComponent implements OnInit {
   navi;
 
   editorOptions = {
-    theme: 'vs-dark',
+    // theme: 'vs-dark',
     language: 'json',
     renderSideBySide: true
   };
