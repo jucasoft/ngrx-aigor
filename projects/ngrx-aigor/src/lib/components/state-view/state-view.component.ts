@@ -8,7 +8,7 @@ import {NgrxAigorService} from '../../ngrx-aigor.service';
       <button pButton pRipple type="button" icon="pi pi-arrow-down" label="Test A" class="p-button-sm p-button-rounded p-button-text p-mr-1"></button>
       <button pButton pRipple type="button" icon="pi pi-arrow-up" label="Test B" class="p-button-sm p-button-rounded p-button-text p-mr-1"></button>
     </div>
-    <ngx-monaco-editor *ngLet="(aigorService.monacoData$ | async) as monacofData"
+    <ngx-monaco-editor *ngLet="(aigorService.monacoSelectedStateData$ | async) as monacofData"
                        [style]="{'width': '100%', 'height':'600px'}"
                        [options]="editorOptions"
                        [model]="monacofData"

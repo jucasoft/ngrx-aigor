@@ -7,7 +7,6 @@ import {RouterStoreModule} from './router-store';
 import {environment} from '../../environments/environment';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {SlideMenuStoreModule} from '@root-store/slide-menu-store';
-import {AigorStoreModule} from '../../../projects/ngrx-aigor/src/lib/root-store/aigor-store';
 
 @NgModule({
   imports: [
@@ -22,8 +21,7 @@ import {AigorStoreModule} from '../../../projects/ngrx-aigor/src/lib/root-store/
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
-    }),
-    AigorStoreModule,
+    })
   ],
   declarations: []
 })
