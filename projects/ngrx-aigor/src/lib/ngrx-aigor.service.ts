@@ -5,6 +5,8 @@ import {ComputedState, LiftedAction, LiftedActions} from '@ngrx/store-devtools/s
 import {BehaviorSubject, MonoTypeOperatorFunction, Observable, pipe} from 'rxjs';
 import {DiffEditorModel, NgxEditorModel} from 'ngx-monaco-editor';
 import {evalData} from './utils/j-utils';
+import {Store} from '@ngrx/store';
+import {applyHandlerActionDecorator} from './utils/aigor-proxy';
 
 const mySelect = (keySelector: (x: any) => any): MonoTypeOperatorFunction<any> => {
   return pipe(
@@ -54,7 +56,10 @@ export class NgrxAigorService {
   public actionSelected$ = new BehaviorSubject(-1);
 
 
-  constructor(private storeDevtools: StoreDevtools) {
+  constructor(private storeDevtools: StoreDevtools, private store$: Store) {
+
+    const dispatch = store$.dispatch;
+    store$.dispatch = new Proxy(dispatch, applyHandlerActionDecorator);
 
     this.monitorState$ = storeDevtools.liftedState.pipe(mySelect(x => x.monitorState));
     this.nextActionId$ = storeDevtools.liftedState.pipe(mySelect(x => x.nextActionId));
