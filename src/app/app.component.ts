@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {RootStoreState, SlideMenuStoreActions, SlideMenuStoreSelectors} from '@root-store/index';
 import {Observable} from 'rxjs';
+import {NgrxAigorService} from 'ngrx-aigor';
 
 @Component({
   selector: 'app-root',
@@ -10,7 +11,7 @@ import {Observable} from 'rxjs';
 })
 export class AppComponent implements OnInit {
 
-  constructor(private readonly store$: Store<RootStoreState.State>) {
+  constructor(private readonly store$: Store<RootStoreState.State>, private ngrxAigorService: NgrxAigorService) {
   }
 
   open$: Observable<boolean>;

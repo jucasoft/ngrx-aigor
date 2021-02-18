@@ -39,6 +39,7 @@
     "primeicons": "^4.1.0",
     "primeng": "^11.2.1",
     "rxjs": "~6.6.3",
+    "stacktrace-gps": "^3.0.4",
     "stacktrace-parser": "^0.1.10",
     "tslib": "^2.0.3",
     "zone.js": "~0.10.3"

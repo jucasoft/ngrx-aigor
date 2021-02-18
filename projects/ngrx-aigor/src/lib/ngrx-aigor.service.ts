@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {StoreDevtools} from '@ngrx/store-devtools';
-import {distinctUntilChanged, map, tap, withLatestFrom} from 'rxjs/operators';
+import {distinctUntilChanged, map, withLatestFrom} from 'rxjs/operators';
 import {ComputedState, LiftedAction, LiftedActions} from '@ngrx/store-devtools/src/reducer';
 import {BehaviorSubject, MonoTypeOperatorFunction, Observable, pipe} from 'rxjs';
 import {DiffEditorModel, NgxEditorModel} from 'ngx-monaco-editor';
@@ -50,7 +50,7 @@ export class NgrxAigorService {
   public isLocked$: Observable<boolean>;
   public isPaused$: Observable<boolean>;
   public monacoActionData$: Observable<NgxEditorModel>;
-  public monacoSelectedActionData$: Observable<NgxEditorModel>;
+  public monacoSelectedActionData$: Observable<{ stack: string, action: NgxEditorModel }>;
   public monacoSelectedStateData$: Observable<NgxEditorModel>;
   public monacoSelectedStateDifData$: Observable<{ modifiedModel: DiffEditorModel, originalModel: DiffEditorModel }>;
   public actionSelected$ = new BehaviorSubject(-1);
@@ -87,18 +87,23 @@ export class NgrxAigorService {
     this.monacoActionData$ = this.actions$.pipe(toNgxEditorModel());
 
     this.monacoSelectedActionData$ = this.actionSelected$.pipe(
-      tap(aaaaaa => console.log('aaaaaa', aaaaaa)),
       withLatestFrom(this.actions$),
-      tap(aaaaaa => console.log('aaaaaa', aaaaaa)),
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;
-        return evalData(() => computedStates[index].action, {});
+        const action = evalData(() => computedStates[index].action, {});
+        return {action, stack: (action as any).stackframeTunzTunz};
       }),
-      toNgxEditorModel(),
+      map(({action, stack}) => {
+          // console.log('stackB', stackB);
+          return {
+            stack,
+            action: {value: JSON.stringify(action, null, 2), language: 'json', uri: undefined}
+          };
+        }
+      )
     );
 
     this.monacoSelectedStateData$ = this.actionSelected$.pipe(
-      tap(aaaaaa => console.log('aaaaaa', aaaaaa)),
       withLatestFrom(this.computedStates$),
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;

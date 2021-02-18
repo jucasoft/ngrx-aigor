@@ -14,9 +14,12 @@ import {CheckboxModule} from 'primeng/checkbox';
 import {StateViewComponent} from './components/state-view/state-view.component';
 import {TabViewModule} from 'primeng/tabview';
 import { ActionViewComponent } from './components/action-view/action-view.component';
+import { StackResolverComponent } from './components/stack-resolver/stack-resolver.component';
+import {RippleModule} from 'primeng/ripple';
+import {ClipboardModule} from '@angular/cdk/clipboard';
 
 @NgModule({
-  declarations: [NgrxAigorComponent, StateDiffComponent, StateViewComponent, ActionViewComponent],
+  declarations: [NgrxAigorComponent, StateDiffComponent, StateViewComponent, ActionViewComponent, StackResolverComponent],
   imports: [
     OrderListModule,
     CommonModule,
@@ -27,7 +30,9 @@ import { ActionViewComponent } from './components/action-view/action-view.compon
     SplitterModule,
     NgLetModule,
     CheckboxModule,
-    TabViewModule
+    TabViewModule,
+    RippleModule,
+    ClipboardModule
   ],
   exports: [NgrxAigorComponent],
   providers: [NgrxAigorService]

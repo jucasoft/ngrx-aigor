@@ -1,31 +1,30 @@
-// import * as StackTrace from 'stacktrace-js';
-// import * as stackTraceParser from 'stacktrace-parser';
 import * as stackTraceParser from 'stacktrace-parser';
+import {StackFrame} from '../model/vo/stack-frame';
 
 export const applyHandlerActionDecorator = {
   apply: (target, thisArg, argumentsList) => {
-    const action = {...argumentsList[0]};
     try {
       throw new Error('My error');
     } catch (ex) {
-      const stack = stackTraceParser.parse(ex.stack);
-      console.log('stack', stack);
-      // action.stack = stack;
+      const stacks = stackTraceParser.parse(ex.stack);
+      const stack = stacks[1];
+      const stackframe: StackFrame = {fileName: stack.file, lineNumber: stack.lineNumber, columnNumber: stack.column};
 
-      const handler = {
-        get: (targetA, prop, receiver) => {
-          if (prop === 'stack') {
-            return stack;
-          } else {
-            return targetA[prop];
+      if (!argumentsList[0].isProxy) {
+        const handler = {
+          get: (targetA, prop, receiver) => {
+            if (prop === 'isProxy') {
+              return true;
+            } else if (prop === 'stackframeTunzTunz') {
+              return stackframe;
+            } else {
+              return targetA[prop];
+            }
           }
-        }
-      };
-
-      argumentsList[0] = new Proxy(action, handler);
+        };
+        argumentsList[0] = new Proxy(argumentsList[0], handler);
+      }
     }
-
-    // argumentsList[0] = action;
     return target.call(thisArg, ...argumentsList);
   }
 };
