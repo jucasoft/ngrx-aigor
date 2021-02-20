@@ -1,4 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {DialogService} from 'primeng/dynamicdialog';
+import {NgrxAigorComponent} from 'ngrx-aigor';
 
 @Component({
   selector: 'app-header',
@@ -10,7 +12,8 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
         </div>
       </div>
       <div class="p-col text-align-right">
-        <em class="fas fa-2x fa-user fa-button p-1" style="color: #FFF;"></em>
+        <em class="fas fa-2x fa-bug fa-button p-1" style="color: #FFF;" (click)="show()"></em>
+        <!--        <em class="fas fa-2x fa-user fa-button p-1" style="color: #FFF;"></em>-->
       </div>
     </div>
   `,
@@ -18,18 +21,26 @@ import {Component, OnInit, ViewEncapsulation} from '@angular/core';
     .fa-button:hover {
       opacity: 0.5;
       transition: transform 0.2s;
-      /*transform: scale(1.1);*/
-      cursor: pointer; cursor: hand;
+      cursor: pointer;
     }
   `],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  providers: [DialogService]
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() {
+  constructor(public dialogService: DialogService) {
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
+  }
+
+  show(): void {
+    const ref = this.dialogService.open(NgrxAigorComponent, {
+      header: 'Choose a Car',
+      width: '90%',
+      height: '90%'
+    });
   }
 
 }

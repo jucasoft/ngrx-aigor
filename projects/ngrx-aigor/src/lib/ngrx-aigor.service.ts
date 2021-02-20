@@ -5,7 +5,7 @@ import {ComputedState, LiftedAction, LiftedActions} from '@ngrx/store-devtools/s
 import {BehaviorSubject, MonoTypeOperatorFunction, Observable, pipe} from 'rxjs';
 import {DiffEditorModel, NgxEditorModel} from 'ngx-monaco-editor';
 import {evalData} from './utils/j-utils';
-import {Store} from '@ngrx/store';
+import {Action, Store} from '@ngrx/store';
 import {applyHandlerActionDecorator} from './utils/aigor-proxy';
 
 const mySelect = (keySelector: (x: any) => any): MonoTypeOperatorFunction<any> => {
@@ -124,4 +124,69 @@ export class NgrxAigorService {
       toDiffEditorModel(),
     );
   }
+
+  dispatch(action: Action): void {
+    this.storeDevtools.dispatch(action);
+  }
+
+  next(action: any): void {
+    this.storeDevtools.next(action);
+  }
+
+  error(error: any): void {
+    this.storeDevtools.error(error);
+  }
+
+  complete(): void {
+    this.storeDevtools.complete();
+  }
+
+  performAction(action: any): void {
+    this.storeDevtools.performAction(action);
+  }
+
+  refresh(): void {
+    this.storeDevtools.refresh();
+  }
+
+  reset(): void {
+    this.storeDevtools.reset();
+  }
+
+  rollback(): void {
+    this.storeDevtools.rollback();
+  }
+
+  commit(): void {
+    this.storeDevtools.commit();
+  }
+
+  sweep(): void {
+    this.storeDevtools.sweep();
+  }
+
+  toggleAction(id: number): void {
+    this.storeDevtools.toggleAction(id);
+  }
+
+  jumpToAction(actionId: number): void {
+    this.storeDevtools.jumpToAction(actionId);
+  }
+
+  jumpToState(index: number): void {
+    this.storeDevtools.jumpToState(index);
+  }
+
+  importState(nextLiftedState: any): void {
+    this.storeDevtools.importState(nextLiftedState);
+  }
+
+  lockChanges(status: boolean): void {
+    this.storeDevtools.lockChanges(status);
+  }
+
+  pauseRecording(status: boolean): void {
+    this.storeDevtools.pauseRecording(status);
+  }
+
 }
