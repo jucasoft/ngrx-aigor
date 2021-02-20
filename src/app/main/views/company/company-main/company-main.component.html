@@ -1,0 +1,12 @@
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <app-search [actions]="actions"></app-search>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <app-button-new-company class="p-mr-2"></app-button-new-company>
+    <app-button-delete-company class="p-mr-2"></app-button-delete-company>
+    <app-button-edit-many-test-company class="p-mr-2"></app-button-edit-many-test-company>
+    <app-button-create-many-test-company></app-button-create-many-test-company>
+  </ng-template>
+</p-toolbar>
+<app-company-list></app-company-list>

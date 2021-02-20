@@ -1,0 +1,12 @@
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <app-search [actions]="actions"></app-search>
+  </ng-template>
+  <ng-template pTemplate="right">
+    <app-button-new-user class="p-mr-2"></app-button-new-user>
+    <app-button-delete-user class="p-mr-2"></app-button-delete-user>
+    <app-button-edit-many-test-user class="p-mr-2"></app-button-edit-many-test-user>
+    <app-button-create-many-test-user></app-button-create-many-test-user>
+  </ng-template>
+</p-toolbar>
+<app-user-list></app-user-list>

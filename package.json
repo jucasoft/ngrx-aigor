@@ -33,7 +33,7 @@
     "error-stack-parser": "^2.0.6",
     "express": "^4.17.1",
     "json-server": "^0.16.3",
-    "ngrx-entity-crud": "^11.6.6",
+    "ngrx-entity-crud": "11.6.5",
     "ngx-monaco-editor": "^9.0.0",
     "primeflex": "^2.0.0",
     "primeicons": "^4.1.0",
