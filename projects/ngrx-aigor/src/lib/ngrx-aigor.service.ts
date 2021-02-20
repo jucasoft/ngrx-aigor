@@ -6,7 +6,7 @@ import {BehaviorSubject, MonoTypeOperatorFunction, Observable, pipe} from 'rxjs'
 import {DiffEditorModel, NgxEditorModel} from 'ngx-monaco-editor';
 import {evalData} from './utils/j-utils';
 import {Action, Store} from '@ngrx/store';
-import {applyHandlerActionDecorator} from './utils/aigor-proxy';
+import {StackFrame} from './model/vo/stack-frame';
 
 const mySelect = (keySelector: (x: any) => any): MonoTypeOperatorFunction<any> => {
   return pipe(
@@ -50,16 +50,15 @@ export class NgrxAigorService {
   public isLocked$: Observable<boolean>;
   public isPaused$: Observable<boolean>;
   public monacoActionData$: Observable<NgxEditorModel>;
-  public monacoSelectedActionData$: Observable<{ stack: string, action: NgxEditorModel }>;
+  public monacoSelectedActionData$: Observable<{ stack: StackFrame, action: NgxEditorModel }>;
   public monacoSelectedStateData$: Observable<NgxEditorModel>;
   public monacoSelectedStateDifData$: Observable<{ modifiedModel: DiffEditorModel, originalModel: DiffEditorModel }>;
   public actionSelected$ = new BehaviorSubject(-1);
 
 
   constructor(private storeDevtools: StoreDevtools, private store$: Store) {
-
-    const dispatch = store$.dispatch;
-    store$.dispatch = new Proxy(dispatch, applyHandlerActionDecorator);
+    // const dispatch = store$.dispatch;
+    // store$.dispatch = new Proxy(dispatch, applyHandlerActionDecorator);
 
     this.monitorState$ = storeDevtools.liftedState.pipe(mySelect(x => x.monitorState));
     this.nextActionId$ = storeDevtools.liftedState.pipe(mySelect(x => x.nextActionId));

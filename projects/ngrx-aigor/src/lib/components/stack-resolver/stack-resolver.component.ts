@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StackFrame} from '../../model/vo/stack-frame';
 import {Observable, of} from 'rxjs';
-import {map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap} from 'rxjs/operators';
 import * as StackTraceGPS from 'stacktrace-gps';
 import {Clipboard} from '@angular/cdk/clipboard';
 
@@ -9,7 +9,9 @@ import {Clipboard} from '@angular/cdk/clipboard';
   selector: 'lib-stack-resolver',
   template: `
     <div *ngLet="(stackFrame$ | async) as stackFrame">
-      <button pButton pRipple type="button" icon="fas fa-code" label="where did the action start?" class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(stackFrame)"></button>
+      <button [disabled]="!stackFrame" pButton pRipple type="button" icon="fas {{!!stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
+              label="{{!!stackFrame ? 'where did the action start ?' : 'I did not find any information :('}}"
+              class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(stackFrame)"></button>
     </div>
   `,
   styles: []
@@ -25,8 +27,10 @@ export class StackResolverComponent implements OnInit {
       }),
       map(({columnNumber, lineNumber, fileName, functionName}) => {
         return {columnNumber, lineNumber, fileName, functionName};
-      })
+      }),
+      catchError(err => of(null))
     );
+
   }
 
   stackFrame$: Observable<{ columnNumber, lineNumber, fileName, functionName }>;

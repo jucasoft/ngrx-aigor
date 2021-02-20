@@ -3,18 +3,17 @@ import {StackFrame} from '../model/vo/stack-frame';
 
 export const applyHandlerActionDecorator = {
   apply: (target, thisArg, argumentsList) => {
-    try {
-      throw new Error('My error');
-    } catch (ex) {
-      const stacks = stackTraceParser.parse(ex.stack);
-      const stack = stacks[1];
-      const stackframe: StackFrame = {fileName: stack.file, lineNumber: stack.lineNumber, columnNumber: stack.column};
-
-      if (!argumentsList[0].isProxy) {
+    if (!argumentsList[0].isProxy) {
+      try {
+        throw new Error('My error');
+      } catch (ex) {
+        const stacks = stackTraceParser.parse(ex.stack);
+        const stack = stacks[1];
+        const stackframe: StackFrame = {fileName: stack.file, lineNumber: stack.lineNumber, columnNumber: stack.column};
         const handler = {
           get: (targetA, prop, receiver) => {
             if (prop === 'isProxy') {
-              return true;
+              return 'true';
             } else if (prop === 'stackframeTunzTunz') {
               return stackframe;
             } else {

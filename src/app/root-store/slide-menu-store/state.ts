@@ -1,7 +1,7 @@
 import {SlideMenuItem} from '@models/vo/slide-menu-item';
 import {MenuItem} from 'primeng/api';
-import {RouterStoreActions} from '@root-store/router-store/index';
-import {SlideMenuStoreActions} from '@root-store/slide-menu-store/index';
+import * as RouterStoreActions from '@root-store/router-store/actions';
+import * as SlideMenuStoreActions from '@root-store/slide-menu-store/actions';
 
 export interface State {
   open: boolean;
