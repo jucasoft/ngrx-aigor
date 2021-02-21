@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {Actions, createEffect, ofType} from '@ngrx/effects';
 import {Observable} from 'rxjs';
 import {Action} from '@ngrx/store';
 import * as actions from './actions';
@@ -16,6 +15,10 @@ import {
   selectCall, selectCatchError, selectResponse
 } from 'ngrx-entity-crud';
 import {repeat} from 'rxjs/operators';
+// import {Actions, createEffect, ofType} from '@ngrx/effects';
+import {Actions, createEffect, ofType as ofTypeorigin} from '@ngrx/effects';
+import {applyHandlerStackTraceOfType} from 'ngrx-aigor';
+const ofType = new Proxy(ofTypeorigin, applyHandlerStackTraceOfType);
 
 @Injectable()
 export class UserStoreEffects {
