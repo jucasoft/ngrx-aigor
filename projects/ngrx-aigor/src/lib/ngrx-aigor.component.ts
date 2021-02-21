@@ -1,7 +1,6 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {NgrxAigorService} from './ngrx-aigor.service';
 
-
 @Component({
   selector: 'lib-ngrx-aigor',
   template: `
@@ -19,11 +18,14 @@ import {NgrxAigorService} from './ngrx-aigor.service';
     <!--    <div>actionSelected$: {{aigorService.actionSelected$ | async}}</div>-->
 
     <div class="p-grid">
-      <div class="p-col-fixed p-p-0" style="width:400px">
-        <p-listbox *ngLet="(aigorService.actions$ | async) as actions" [options]="actions" optionLabel="id" (onChange)="onChange($event, actions.indexOf($event.value))">
+      <div class="p-col-fixed p-p-0">
+        <p-listbox *ngLet="(aigorService.actions$ | async) as actions"
+                   [options]="actions"
+                   optionLabel="id"
+                   (onChange)="onChange($event, actions.indexOf($event.value))">
           <ng-template let-item pTemplate="item" let-i="index">
-            <div class="p-d-flex p-jc-between" style="width:100%">
-              <div>{{item.id}} {{item.action.type}}</div>
+            <div class="p-d-flex p-jc-between w-100">
+              <div>{{item.action.type}}</div>
               <div>
                 <p-tag value="Jump" class="pointer p-mr-1 p-p-0" (click)="onJump(i)"></p-tag>
                 <p-tag value="Skip" class="pointer p-p-0" (click)="onSkip(i)"></p-tag>
@@ -78,8 +80,6 @@ export class NgrxAigorComponent implements OnInit {
 
   onChange(event: any, i): void {
     console.log('NgrxAigorComponent.onChange()');
-    console.log('event', event);
-    console.log('i', i);
     this.aigorService.actionSelected$.next(i);
   }
 

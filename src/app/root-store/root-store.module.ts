@@ -22,7 +22,7 @@ import { CompanyStoreModule } from '@root-store/company-store';
     }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
+      maxAge: 15, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     UserStoreModule,
