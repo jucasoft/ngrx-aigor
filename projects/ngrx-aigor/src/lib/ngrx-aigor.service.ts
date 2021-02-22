@@ -50,7 +50,7 @@ export class NgrxAigorService {
   public isLocked$: Observable<boolean>;
   public isPaused$: Observable<boolean>;
   public monacoActionData$: Observable<NgxEditorModel>;
-  public monacoSelectedActionData$: Observable<{ stack: StackFrame, action: NgxEditorModel }>;
+  public monacoSelectedActionData$: Observable<{ stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] }, action: NgxEditorModel }>;
   public monacoSelectedStateData$: Observable<NgxEditorModel>;
   public monacoSelectedStateDifData$: Observable<{ modifiedModel: DiffEditorModel, originalModel: DiffEditorModel }>;
   public actionSelected$ = new BehaviorSubject(-1);
@@ -90,12 +90,12 @@ export class NgrxAigorService {
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;
         const action = evalData(() => computedStates[index].action, {});
-        return {action, stack: (action as any).stackframeTunzTunz};
+        return {action, stackframeMap: (action as any).stackframeMap};
       }),
-      map(({action, stack}) => {
+      map(({action, stackframeMap}) => {
           // console.log('stackB', stackB);
           return {
-            stack,
+            stackframeMap,
             action: {value: JSON.stringify(action, null, 2), language: 'json', uri: undefined}
           };
         }

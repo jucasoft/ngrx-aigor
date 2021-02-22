@@ -1,17 +1,19 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {StackFrame} from '../../model/vo/stack-frame';
-import {Observable, of} from 'rxjs';
+import {forkJoin, from, Observable, of} from 'rxjs';
 import {catchError, map, switchMap} from 'rxjs/operators';
 import * as StackTraceGPS from 'stacktrace-gps';
 import {Clipboard} from '@angular/cdk/clipboard';
+import {renderStackFrame} from '../../utils/aigor-proxy';
 
 @Component({
   selector: 'lib-stack-resolver',
   template: `
-    <div *ngLet="(stackFrame$ | async) as stackFrame">
-      <button [disabled]="!stackFrame" pButton pRipple type="button" icon="fas {{!!stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
-              label="{{!!stackFrame ? 'where did the action start ?' : 'I did not find any information :('}}"
-              class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(stackFrame)"></button>
+    <div *ngLet="(collection$ | async) as collection; let last = last">
+      <button *ngFor="let item of collection" [disabled]="!item.stackFrame" pButton pRipple type="button" icon="fas {{!!item.stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
+              label="{{item.label}}"
+              class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(item.stackFrame)"></button>
+      <em *ngIf="!last" class="fas fa-2x fa-bug" style="color: #FFF;"></em>
     </div>
   `,
   styles: []
@@ -19,21 +21,35 @@ import {Clipboard} from '@angular/cdk/clipboard';
 export class StackResolverComponent implements OnInit {
 
   @Input()
-  set stack(stackFrame: StackFrame) {
-    this.stackFrame$ = of(stackFrame).pipe(
-      switchMap(value => {
+  set stackframeMap(stackframeMapValue: { dispatch: StackFrame, ofType: StackFrame[] }) {
+    this.collection$ = of(stackframeMapValue).pipe(
+      switchMap((value: { dispatch: StackFrame, ofType: StackFrame[] }) => {
         const gps = new StackTraceGPS();
-        return gps.pinpoint(value);
-      }),
-      map(({columnNumber, lineNumber, fileName, functionName}) => {
-        return {columnNumber, lineNumber, fileName, functionName};
-      }),
-      catchError(err => of(null))
+
+        if (!value) {
+          return of([]);
+        }
+
+        return forkJoin([
+          from(gps.pinpoint(value.dispatch)).pipe(
+            map(stackFrame => ({label: 'dispatch', stackFrame})),
+            catchError(err => of(null))
+          ),
+          ...value.ofType.map(value1 => from(gps.pinpoint(value1)).pipe(
+            map(stackFrame => ({label: 'ofType', stackFrame})),
+            catchError(err => of(({label: 'ofType', stackFrame: null})))
+            )
+          )
+        ]).pipe(
+          catchError(err => of([]))
+        );
+
+      })
     );
 
   }
 
-  stackFrame$: Observable<{ columnNumber, lineNumber, fileName, functionName }>;
+  collection$: Observable<{ label: string, stackFrame: { columnNumber: number, lineNumber: number, fileName: string, functionName: string } }[]>;
 
   constructor(private clipboard: Clipboard) {
   }
@@ -43,8 +59,7 @@ export class StackResolverComponent implements OnInit {
   }
 
   onClick({columnNumber, lineNumber, fileName, functionName}): void {
-    const file = fileName.replace('webpack:///', 'webpack:///./');
-    const link = `${file}:${lineNumber}:${columnNumber}`;
+    const link = renderStackFrame({columnNumber, lineNumber, fileName: fileName.replace('webpack:///', 'webpack:///./')});
     console.log(`generated and copied to the clipboard`, link);
     this.clipboard.copy(link.replace('webpack:///./', ''));
   }

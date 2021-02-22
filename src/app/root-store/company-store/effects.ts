@@ -4,26 +4,15 @@ import {Action} from '@ngrx/store';
 import * as actions from './actions';
 import {Company} from '@models/vo/company';
 import {CompanyService} from '@services/company.service';
-import {
-  createCall, createCatchError, createResponse,
-  createManyCall, createManyCatchError, createManyResponse,
-  deleteCall, deleteCatchError, deleteResponse,
-  deleteManyCall, deleteManyCatchError, deleteManyResponse,
-  editCall, editCatchError, editResponse,
-  editManyCall, editManyCatchError, editManyResponse,
-  searchCall, searchCatchError, searchResponse,
-  selectCall, selectCatchError, selectResponse
-} from 'ngrx-entity-crud';
+import {createCall, createCatchError, createManyCall, createManyCatchError, createManyResponse, createResponse, deleteCall, deleteCatchError, deleteManyCall, deleteManyCatchError, deleteManyResponse, deleteResponse, editCall, editCatchError, editManyCall, editManyCatchError, editManyResponse, editResponse, searchCall, searchCatchError, searchResponse, selectCall, selectCatchError, selectResponse} from 'ngrx-entity-crud';
 import {repeat} from 'rxjs/operators';
-// import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {Actions, createEffect, ofType as ofTypeorigin} from '@ngrx/effects';
-import {applyHandlerStackTraceOfType} from 'ngrx-aigor';
-const ofType = new Proxy(ofTypeorigin, applyHandlerStackTraceOfType);
+import {Actions, createEffect} from '@ngrx/effects';
+import {ofType} from 'ngrx-aigor';
 
 @Injectable()
 export class CompanyStoreEffects {
-    constructor(private readonly actions$: Actions, private readonly service: CompanyService) {
-    }
+  constructor(private readonly actions$: Actions, private readonly service: CompanyService) {
+  }
 
   searchRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.SearchRequest),
@@ -33,7 +22,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  deleteRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  deleteRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.DeleteRequest),
     deleteCall<Company>(this.service),
     deleteResponse<Company>(actions, Company, {dispatchResponse: false}),
@@ -41,7 +30,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  deleteManyRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  deleteManyRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.DeleteManyRequest),
     deleteManyCall<Company>(this.service),
     deleteManyResponse<Company>(actions, Company, {dispatchResponse: false}),
@@ -49,7 +38,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  createRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  createRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.CreateRequest),
     createCall<Company>(this.service),
     createResponse<Company>(actions, {dispatchResponse: false}),
@@ -57,7 +46,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  createManyRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  createManyRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.CreateManyRequest),
     createManyCall<Company>(this.service),
     createManyResponse<Company>(actions, {dispatchResponse: false}),
@@ -65,7 +54,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  editRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  editRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.EditRequest),
     editCall<Company>(this.service),
     editResponse<Company>(actions, {dispatchResponse: false}),
@@ -73,7 +62,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  editManyRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  editManyRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.EditManyRequest),
     editManyCall<Company>(this.service),
     editManyResponse<Company>(actions, {dispatchResponse: false}),
@@ -81,7 +70,7 @@ export class CompanyStoreEffects {
     repeat()
   ));
 
-  selectRequestEffect$: Observable<Action>  = createEffect(() => this.actions$.pipe(
+  selectRequestEffect$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(actions.SelectRequest),
     selectCall<Company>(this.service),
     selectResponse<Company>(actions, {dispatchResponse: false}),
