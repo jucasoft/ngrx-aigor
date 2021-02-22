@@ -10,10 +10,11 @@ import {renderStackFrame} from '../../utils/aigor-proxy';
   selector: 'lib-stack-resolver',
   template: `
     <div *ngLet="(collection$ | async) as collection; let last = last">
-      <button *ngFor="let item of collection" [disabled]="!item.stackFrame" pButton pRipple type="button" icon="fas {{!!item.stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
-              label="{{item.label}}"
-              class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(item.stackFrame)"></button>
-      <em *ngIf="!last" class="fas fa-2x fa-bug" style="color: #FFF;"></em>
+      <div *ngFor="let item of collection">
+        <button [disabled]="!item.stackFrame" pButton pRipple type="button" icon="fas {{!!item.stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
+                label="{{item.label}}"
+                class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(item.stackFrame)"></button>
+      </div>
     </div>
   `,
   styles: []
