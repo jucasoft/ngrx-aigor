@@ -1,32 +1,23 @@
-import {ofType as ofTypeorigin} from '@ngrx/effects';
-import {ActionCreator, Creator} from '@ngrx/store';
+import {createEffect as createEffectA, ofType as ofTypeorigin} from '@ngrx/effects';
+import {Action, ActionCreator, createReducer as createReducerA, Creator} from '@ngrx/store';
 import {MonoTypeOperatorFunction, pipe} from 'rxjs';
 import {StackFrame} from '../model/vo/stack-frame';
-import {getStackFrame, renderStackFrame} from './aigor-proxy';
+import {applyHandlerONSDecorator, getStackFrame, renderStackFrame} from './aigor-proxy';
 import {map, tap} from 'rxjs/operators';
-import {createEffect as createEffectA} from '@ngrx/effects';
 
 function ofType(...allowedTypes: Array<string | ActionCreator<string, Creator>>): MonoTypeOperatorFunction<any> {
-  console.log('ofType.ofType()');
   let stackframe: StackFrame;
   let stackframeString: string;
   try {
     throw new Error(); // generates an exception
   } catch (ex) {
-    console.log('ex.stack', ex.stack);
     stackframe = getStackFrame(ex.stack, 1);
     stackframeString = renderStackFrame(stackframe);
-    console.log('stackframe', stackframe);
   }
   return pipe(
     ofTypeorigin(...allowedTypes),
     tap((action: any) => {
-      console.log('action.type', action.type);
       action.addOfType = stackframe;
-      console.log('action.isProxy', action.isProxy);
-      console.log('action.stackframeTunzTunz', action.stackframeTunzTunz);
-      console.log('stackframe', stackframe);
-      console.log('stackframeString', stackframeString);
     })
   );
 }
@@ -40,15 +31,10 @@ function createEffect(
   try {
     throw new Error(); // generates an exception
   } catch (ex) {
-    console.log('ex.stack', ex.stack);
     stackframe = getStackFrame(ex.stack, 1);
     stackframeString = renderStackFrame(stackframe);
-    console.log('stackframe', stackframe);
   }
   const effect = source().pipe(
-    tap(action => {
-      console.log('action', action)
-    }),
     map(value => {
 
       const stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] } = {
@@ -67,7 +53,6 @@ function createEffect(
           }
         },
         set: (obj, prop, value) => {
-          console.log('handler.set()');
           if (prop === 'addOfType') {
             stackframeMap.ofType.push(value);
           }
@@ -81,4 +66,23 @@ function createEffect(
   return createEffectA(() => effect, config);
 }
 
-export {ofType, createEffect};
+function createReducer<S, A extends Action = Action>(
+  initialState: S,
+  ...ons: any[]
+): any {
+  let stackframe;
+  try {
+    throw new Error('My error');
+  } catch (ex) {
+    stackframe = getStackFrame(ex.stack, 1);
+  }
+  const onsB = ons.map(({reducer, types}) => {
+    return {
+      reducer: new Proxy(reducer, applyHandlerONSDecorator(stackframe)),
+      types
+    };
+  });
+  return createReducerA(initialState, ...onsB as any);
+}
+
+export {ofType, createEffect, createReducer};

@@ -1,9 +1,13 @@
 import {actions} from './actions';
-import {adapter, initialState} from './state';
+import {adapter, initialState, State} from './state';
+import {createCrudOns} from 'ngrx-entity-crud';
 
-export const featureReducer = adapter.createCrudReducer(initialState, actions);
+import {createReducer} from 'ngrx-aigor';
+// import {createReducer} from '@ngrx/store';
 
 /*
+export const featureReducer = adapter.createCrudReducer(initialState, actions);
+
 // example code
 const predicate = (criteria: ICriteria) => (value) => {
   const {queryParams} = criteria;
@@ -26,7 +30,7 @@ const customSearchSuccessOn = on(actions.SearchSuccess, (state: State, {type, it
   return adapter.addMany(
     items, newState
   );
-});
+});*/
 
 // example code
 const {
@@ -100,4 +104,3 @@ export const featureReducer = createReducer<State>(initialState,
   createOn,
   deleteOn
 );
-*/

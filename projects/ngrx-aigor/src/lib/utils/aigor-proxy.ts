@@ -50,6 +50,14 @@ export const applyHandlerStackTraceOfType = {
   }
 };
 
+export const applyHandlerONSDecorator = (stackframe) => ({
+  apply: (target, thisArg, argumentsList) => {
+    const stackframeSelt = stackframe;
+    (argumentsList[1] as any).addOfType = stackframeSelt;
+    return target.call(thisArg, ...argumentsList);
+  }
+});
+
 export const getStackFrame = (stackString: string, index: number): StackFrame => {
   const stacks = stackTraceParser.parse(stackString);
   const stack = stacks[index];
