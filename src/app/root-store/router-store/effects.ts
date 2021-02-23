@@ -4,10 +4,9 @@ import {filter, map, tap} from 'rxjs/operators';
 import * as actions from './actions';
 import {ActivatedRoute, NavigationStart, Router} from '@angular/router';
 import {Location} from '@angular/common';
-// import {Actions, createEffect, ofType} from '@ngrx/effects';
-import {Actions, createEffect, ofType as ofTypeorigin} from '@ngrx/effects';
-import {applyHandlerStackTraceOfType} from 'ngrx-aigor';
-const ofType = new Proxy(ofTypeorigin, applyHandlerStackTraceOfType);
+import {Actions} from '@ngrx/effects';
+import {ofType, createEffect} from 'ngrx-aigor';
+
 
 @Injectable()
 export class RouterEffects {
