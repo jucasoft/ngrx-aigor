@@ -2,7 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Store} from '@ngrx/store';
 import {RootStoreState, SlideMenuStoreActions, SlideMenuStoreSelectors} from '@root-store/index';
 import {Observable} from 'rxjs';
-import {applyHandlerActionDecorator} from '../../projects/ngrx-aigor/src/lib/utils/aigor-proxy';
+import {applyHandlerActionDecorator} from 'ngrx-aigor';
 
 @Component({
   selector: 'app-root',

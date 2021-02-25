@@ -2,7 +2,7 @@ import {createEffect as createEffectA, ofType as ofTypeorigin} from '@ngrx/effec
 import {Action, ActionCreator, createReducer as createReducerA, Creator} from '@ngrx/store';
 import {MonoTypeOperatorFunction, pipe} from 'rxjs';
 import {StackFrame} from '../model/vo/stack-frame';
-import {applyHandlerONSDecorator, getStackFrame, renderStackFrame} from './aigor-proxy';
+import {applyHandlerReducer, getStackFrame, handler, renderStackFrame, StackframeMap} from './aigor-proxy';
 import {map, tap} from 'rxjs/operators';
 
 function ofType(...allowedTypes: Array<string | ActionCreator<string, Creator>>): MonoTypeOperatorFunction<any> {
@@ -17,7 +17,7 @@ function ofType(...allowedTypes: Array<string | ActionCreator<string, Creator>>)
   return pipe(
     ofTypeorigin(...allowedTypes),
     tap((action: any) => {
-      action.addOfType = stackframe;
+      action.addEffectOfType = stackframe;
     })
   );
 }
@@ -36,30 +36,13 @@ function createEffect(
   }
   const effect = source().pipe(
     map(value => {
-
-      const stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] } = {
-        dispatch: {...stackframe},
-        ofType: []
+      const stackframeMap: StackframeMap = {
+        storeDispatch: null,
+        effectOfType: [],
+        effectDispatch: {...stackframe},
+        reducer: []
       };
-
-      const handler = {
-        get: (targetA, prop, receiver) => {
-          if (prop === 'isProxy') {
-            return 'true';
-          } else if (prop === 'stackframeMap') {
-            return stackframeMap;
-          } else {
-            return targetA[prop];
-          }
-        },
-        set: (obj, prop, value) => {
-          if (prop === 'addOfType') {
-            stackframeMap.ofType.push(value);
-          }
-          return true;
-        }
-      };
-      return new Proxy(value, handler);
+      return new Proxy(value, handler(stackframeMap));
 
     })
   );
@@ -78,7 +61,7 @@ function createReducer<S, A extends Action = Action>(
   }
   const onsB = ons.map(({reducer, types}) => {
     return {
-      reducer: new Proxy(reducer, applyHandlerONSDecorator(stackframe)),
+      reducer: new Proxy(reducer, applyHandlerReducer(stackframe)),
       types
     };
   });

@@ -1,10 +1,9 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {StackFrame} from '../../model/vo/stack-frame';
 import {forkJoin, from, Observable, of} from 'rxjs';
-import {catchError, map, switchMap} from 'rxjs/operators';
+import {catchError, map, switchMap, tap} from 'rxjs/operators';
 import * as StackTraceGPS from 'stacktrace-gps';
 import {Clipboard} from '@angular/cdk/clipboard';
-import {renderStackFrame} from '../../utils/aigor-proxy';
+import {renderStackFrame, StackframeMap} from '../../utils/aigor-proxy';
 
 @Component({
   selector: 'lib-stack-resolver',
@@ -22,26 +21,55 @@ import {renderStackFrame} from '../../utils/aigor-proxy';
 export class StackResolverComponent implements OnInit {
 
   @Input()
-  set stackframeMap(stackframeMapValue: { dispatch: StackFrame, ofType: StackFrame[] }) {
+  set stackframeMap(stackframeMapValue: StackframeMap) {
     this.collection$ = of(stackframeMapValue).pipe(
-      switchMap((value: { dispatch: StackFrame, ofType: StackFrame[] }) => {
+      switchMap((value: StackframeMap) => {
         const gps = new StackTraceGPS();
 
         if (!value) {
           return of([]);
         }
+        debugger
 
-        return forkJoin([
-          from(gps.pinpoint(value.dispatch)).pipe(
-            map(stackFrame => ({label: 'dispatch', stackFrame})),
+        let sourceForkJoin = [];
+        if (value.storeDispatch) {
+          sourceForkJoin.push(from(gps.pinpoint(value.storeDispatch)).pipe(
+            map(stackFrame => ({label: 'storeDispatch', stackFrame})),
             catchError(err => of(null))
-          ),
-          ...value.ofType.map(value1 => from(gps.pinpoint(value1)).pipe(
-            map(stackFrame => ({label: 'ofType', stackFrame})),
-            catchError(err => of(({label: 'ofType', stackFrame: null})))
+          ));
+        }
+
+        if (!!value.effectOfType) {
+          sourceForkJoin = [...sourceForkJoin,
+            ...value.effectOfType.map(value1 => from(gps.pinpoint(value1)).pipe(
+              map(stackFrame => ({label: 'effectOfType', stackFrame})),
+              catchError(err => of(({label: 'effectOfType', stackFrame: null})))
+              )
             )
-          )
-        ]).pipe(
+          ];
+        }
+
+        if (!!value.effectDispatch) {
+          sourceForkJoin = [...sourceForkJoin,
+            from(gps.pinpoint(value.effectDispatch)).pipe(
+              map(stackFrame => ({label: 'effectDispatch', stackFrame})),
+              catchError(err => of(null))
+            )
+          ];
+        }
+
+        if (!!value.reducer) {
+          sourceForkJoin = [...sourceForkJoin,
+            ...value.reducer.map(value1 => from(gps.pinpoint(value1)).pipe(
+              map(stackFrame => ({label: 'reducer', stackFrame})),
+              catchError(err => of(({label: 'reducer', stackFrame: null})))
+              )
+            )
+          ];
+        }
+
+        return forkJoin(sourceForkJoin).pipe(
+          tap((valueA) => console.log('sourceForkJoin', valueA)),
           catchError(err => of([]))
         );
 

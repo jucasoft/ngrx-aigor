@@ -1,59 +1,57 @@
 import * as stackTraceParser from 'stacktrace-parser';
 import {StackFrame} from '../model/vo/stack-frame';
 
+export class StackframeMap {
+  storeDispatch: StackFrame;
+  effectOfType: StackFrame[];
+  reducer: StackFrame[];
+  effectDispatch: StackFrame;
+}
+
+export const handler = (stackframeMap) => ({
+  get: (targetA, prop, receiver) => {
+    if (prop === 'isProxy') {
+      return 'true';
+    } else if (prop === 'stackframeMap') {
+      return stackframeMap;
+    } else {
+      return targetA[prop];
+    }
+  },
+  set: (obj, prop, value) => {
+    if (prop === 'addReducer') {
+      stackframeMap.reducer.push(value);
+    }
+    if (prop === 'addEffectOfType') {
+      stackframeMap.effectOfType.push(value);
+    }
+    return true;
+  }
+});
+
 export const applyHandlerActionDecorator = {
   apply: (target, thisArg, argumentsList) => {
     if (!argumentsList[0].isProxy) {
       try {
         throw new Error('My error');
       } catch (ex) {
-        const stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] } = {
-          dispatch: getStackFrame(ex.stack, 1),
-          ofType: []
+        const stackframeMap: StackframeMap = {
+          storeDispatch: getStackFrame(ex.stack, 1),
+          effectOfType: [],
+          effectDispatch: null,
+          reducer: []
         };
-        const handler = {
-          get: (targetA, prop, receiver) => {
-            if (prop === 'isProxy') {
-              return 'true';
-            } else if (prop === 'stackframeMap') {
-              return stackframeMap;
-            } else {
-              return targetA[prop];
-            }
-          },
-          set: (obj, prop, value) => {
-            console.log('handler.set()');
-            if (prop === 'addOfType') {
-              stackframeMap.ofType.push(value);
-            }
-            return true;
-          }
-        };
-        argumentsList[0] = new Proxy(argumentsList[0], handler);
+        argumentsList[0] = new Proxy(argumentsList[0], handler(stackframeMap));
       }
     }
     return target.call(thisArg, ...argumentsList);
   }
 };
 
-export const applyHandlerStackTraceOfType = {
-  apply: (target, thisArg, argumentsList) => {
-    // argumentsList[0] = new Proxy(argumentsList[0], getHandler)
-    try {
-      throw new Error(); // generates an exception
-    } catch (ex) {
-      console.log('ex.stack', ex.stack);
-      const stackframe: StackFrame = getStackFrame(ex.stack, 1);
-      console.log('stackframe', stackframe);
-    }
-    return target.call(thisArg, ...argumentsList);
-  }
-};
-
-export const applyHandlerONSDecorator = (stackframe) => ({
+export const applyHandlerReducer = (stackframe) => ({
   apply: (target, thisArg, argumentsList) => {
     const stackframeSelt = stackframe;
-    (argumentsList[1] as any).addOfType = stackframeSelt;
+    (argumentsList[1] as any).addReducer = stackframeSelt;
     return target.call(thisArg, ...argumentsList);
   }
 });
