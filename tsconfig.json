@@ -3,7 +3,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    "traceResolution": true,
+    "traceResolution": false,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,

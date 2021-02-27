@@ -29,7 +29,6 @@ export class StackResolverComponent implements OnInit {
         if (!value) {
           return of([]);
         }
-        debugger
 
         let sourceForkJoin = [];
         if (value.storeDispatch) {
