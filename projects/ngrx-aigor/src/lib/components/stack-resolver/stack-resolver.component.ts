@@ -1,85 +1,131 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {forkJoin, from, Observable, of} from 'rxjs';
-import {catchError, map, switchMap, tap} from 'rxjs/operators';
-import * as StackTraceGPS from 'stacktrace-gps';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {renderStackFrame, StackframeMap} from '../../utils/aigor-proxy';
+import {TreeNode} from 'primeng/api';
+import {StackFrame} from '../../model/vo/stack-frame';
 
 @Component({
   selector: 'lib-stack-resolver',
   template: `
-    <div *ngLet="(collection$ | async) as collection; let last = last">
-      <div *ngFor="let item of collection">
-        <button [disabled]="!item.stackFrame" pButton pRipple type="button" icon="fas {{!!item.stackFrame ? 'fa-map-marker-alt' : 'fa-times'}}"
-                label="{{item.label}}"
-                class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="onClick(item.stackFrame)"></button>
-      </div>
-    </div>
+    <p-tree [value]="treeNode" layout="horizontal" selectionMode="single"></p-tree>
   `,
   styles: []
 })
 export class StackResolverComponent implements OnInit {
 
+
   @Input()
-  set stackframeMap(stackframeMapValue: StackframeMap) {
-    this.collection$ = of(stackframeMapValue).pipe(
-      switchMap((value: StackframeMap) => {
-        const gps = new StackTraceGPS();
+  set stackframeMap(value: StackframeMap) {
 
-        if (!value) {
-          return of([]);
-        }
+    // const gps = new StackTraceGPS();
 
-        let sourceForkJoin = [];
-        if (value.storeDispatch) {
-          sourceForkJoin.push(from(gps.pinpoint(value.storeDispatch)).pipe(
-            map(stackFrame => ({label: 'storeDispatch', stackFrame})),
-            catchError(err => of(null))
-          ));
-        }
+    if (!value) {
+      this.treeNode = [];
+      return;
+    }
 
-        if (!!value.effectOfType) {
-          sourceForkJoin = [...sourceForkJoin,
-            ...value.effectOfType.map(value1 => from(gps.pinpoint(value1)).pipe(
-              map(stackFrame => ({label: 'effectOfType', stackFrame})),
-              catchError(err => of(({label: 'effectOfType', stackFrame: null})))
-              )
-            )
-          ];
-        }
+    const root = this.getRoot(value.storeDispatch, value.effectDispatch);
+    let children = [];
 
-        if (!!value.effectDispatch) {
-          sourceForkJoin = [...sourceForkJoin,
-            from(gps.pinpoint(value.effectDispatch)).pipe(
-              map(stackFrame => ({label: 'effectDispatch', stackFrame})),
-              catchError(err => of(null))
-            )
-          ];
-        }
+    if (!!value.effectOfType) {
+      children = [...children, ...value.effectOfType.map(item => {
+        return this.getChildren('effectOfType', item);
+      })];
+    }
 
-        if (!!value.reducer) {
-          sourceForkJoin = [...sourceForkJoin,
-            ...value.reducer.map(value1 => from(gps.pinpoint(value1)).pipe(
-              map(stackFrame => ({label: 'reducer', stackFrame})),
-              catchError(err => of(({label: 'reducer', stackFrame: null})))
-              )
-            )
-          ];
-        }
+    if (!!value.reducer) {
+      children = [...children, ...value.reducer.map(item => {
+        return this.getChildren('reducer', item);
+      })];
+    }
 
-        return forkJoin(sourceForkJoin).pipe(
-          tap((valueA) => console.log('sourceForkJoin', valueA)),
-          catchError(err => of([]))
-        );
+    root.children = children;
 
-      })
-    );
+    this.treeNode = [root];
+
+    //
+    // let sourceForkJoin = [];
+    // if (value.storeDispatch) {
+    //   sourceForkJoin.push(from(gps.pinpoint(value.storeDispatch)).pipe(
+    //     map(stackFrame => ({label: 'storeDispatch', stackFrame})),
+    //     catchError(err => of(null))
+    //   ));
+    // }
+    //
+    // if (!!value.effectDispatch) {
+    //   sourceForkJoin = [...sourceForkJoin,
+    //     from(gps.pinpoint(value.effectDispatch)).pipe(
+    //       map(stackFrame => ({label: 'effectDispatch', stackFrame})),
+    //       catchError(err => of(null))
+    //     )
+    //   ];
+    // }
+    //
+    // if (!!value.effectOfType) {
+    //   sourceForkJoin = [...sourceForkJoin,
+    //     ...value.effectOfType.map(value1 => from(gps.pinpoint(value1)).pipe(
+    //       map(stackFrame => ({label: 'effectOfType', stackFrame})),
+    //       catchError(err => of(({label: 'effectOfType', stackFrame: null})))
+    //       )
+    //     )
+    //   ];
+    // }
+    //
+    // if (!!value.reducer) {
+    //   sourceForkJoin = [...sourceForkJoin,
+    //     ...value.reducer.map(value1 => from(gps.pinpoint(value1)).pipe(
+    //       map(stackFrame => ({label: 'reducer', stackFrame})),
+    //       catchError(err => of(({label: 'reducer', stackFrame: null})))
+    //       )
+    //     )
+    //   ];
+    // }
+    // return forkJoin(sourceForkJoin).pipe(
+    //   tap((valueA) => console.log('sourceForkJoin', valueA)),
+    //   map((values: { label: string, stackFrame: StackFrame }[]) => {
+    //     if (values.length === 0) {
+    //       return values;
+    //     }
+    //     const rootElement = values.shift();
+    //     if (rootElement.label === 'storeDispatch' || rootElement.label === 'effectDispatch') {
+    //       return values;
+    //     }
+    //
+    //   }),
+    //   catchError(err => of([]))
+    // );
+    // );
 
   }
 
-  collection$: Observable<{ label: string, stackFrame: { columnNumber: number, lineNumber: number, fileName: string, functionName: string } }[]>;
+  treeNode: TreeNode[];
+
+  // collection$: Observable<{ label: string, stackFrame: { columnNumber: number, lineNumber: number, fileName: string, functionName: string } }[]>;
 
   constructor(private clipboard: Clipboard) {
+  }
+
+  getRoot(storeDispatch: StackFrame, effectDispatch: StackFrame): TreeNode {
+    const data = storeDispatch || effectDispatch;
+    const label = storeDispatch ? 'storeDispatch' : 'effectDispatch';
+
+    return {
+      label,
+      data,
+      expanded: true,
+      expandedIcon: 'pi pi-folder-open',
+      collapsedIcon: 'pi pi-folder'
+    };
+  }
+
+  getChildren(label: string, data: StackFrame): TreeNode {
+    return {
+      label,
+      data,
+      expanded: true,
+      expandedIcon: 'pi pi-folder-open',
+      collapsedIcon: 'pi pi-folder'
+    };
   }
 
   ngOnInit(): void {

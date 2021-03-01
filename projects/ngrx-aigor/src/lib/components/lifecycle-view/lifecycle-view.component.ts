@@ -3,20 +3,15 @@ import {NgrxAigorService} from '../../ngrx-aigor.service';
 import {EditorComponent} from 'ngx-monaco-editor';
 
 @Component({
-  selector: 'lib-action-view',
+  selector: 'lib-lifecycle-view',
   template: `
     <div *ngLet="(aigorService.monacoSelectedActionData$ | async) as monacoData">
-      <ngx-monaco-editor #editorComponent
-                         [style]="{'width': '100%', 'height':'600px'}"
-                         [options]="editorOptions"
-                         [model]="monacoData.action"
-                         (onInit)="onInit($event, editorComponent)">
-      </ngx-monaco-editor>
+      <lib-stack-resolver [stackframeMap]="monacoData.stackframeMap"></lib-stack-resolver>
     </div>
   `,
   styles: []
 })
-export class ActionViewComponent implements OnInit {
+export class LifecycleViewComponent implements OnInit {
 
   ev;
   editorComponent: EditorComponent;

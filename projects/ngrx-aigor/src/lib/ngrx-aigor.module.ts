@@ -18,9 +18,11 @@ import {StackResolverComponent} from './components/stack-resolver/stack-resolver
 import {RippleModule} from 'primeng/ripple';
 import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TagModule} from 'primeng/tag';
+import {TreeModule} from 'primeng/tree';
+import {LifecycleViewComponent} from './components/lifecycle-view/lifecycle-view.component';
 
 @NgModule({
-  declarations: [NgrxAigorComponent, StateDiffComponent, StateViewComponent, ActionViewComponent, StackResolverComponent],
+  declarations: [NgrxAigorComponent, StateDiffComponent, StateViewComponent, ActionViewComponent, StackResolverComponent, LifecycleViewComponent],
   imports: [
     OrderListModule,
     CommonModule,
@@ -34,7 +36,8 @@ import {TagModule} from 'primeng/tag';
     TabViewModule,
     RippleModule,
     ClipboardModule,
-    TagModule
+    TagModule,
+    TreeModule
   ],
   exports: [NgrxAigorComponent],
   providers: [NgrxAigorService]
