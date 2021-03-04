@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {NgrxAigorComponent} from './ngrx-aigor.component';
+import {NgrxAigorComponent, NgrxAigorContainerComponent} from './ngrx-aigor.component';
 import {NgrxAigorService} from './ngrx-aigor.service';
 import {OrderListModule} from 'primeng/orderlist';
 import {CommonModule} from '@angular/common';
@@ -20,9 +20,19 @@ import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TagModule} from 'primeng/tag';
 import {TreeModule} from 'primeng/tree';
 import {LifecycleViewComponent} from './components/lifecycle-view/lifecycle-view.component';
+import {MainComponent} from './components/main/main.component';
 
 @NgModule({
-  declarations: [NgrxAigorComponent, StateDiffComponent, StateViewComponent, ActionViewComponent, StackResolverComponent, LifecycleViewComponent],
+  declarations: [
+    NgrxAigorComponent,
+    StateDiffComponent,
+    StateViewComponent,
+    ActionViewComponent,
+    StackResolverComponent,
+    LifecycleViewComponent,
+    MainComponent,
+    NgrxAigorContainerComponent
+  ],
   imports: [
     OrderListModule,
     CommonModule,

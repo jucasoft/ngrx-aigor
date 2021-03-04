@@ -22,7 +22,6 @@ export class ActionViewComponent implements OnInit {
   editorComponent: EditorComponent;
 
   editorOptions = {
-    // theme: 'vs-dark',
     language: 'json'
   };
 
