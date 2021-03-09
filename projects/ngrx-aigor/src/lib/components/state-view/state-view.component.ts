@@ -41,7 +41,7 @@ export class StateViewComponent implements OnInit {
   }
 
   fold(): void {
-    this.editorComponent._editor.trigger('fold', 'editor.foldAll');
+    this.editorComponent._editor.trigger('fold', 'editor.foldLevel2');
     // this.editorComponent;
     // this.editorComponent.foldAll();
   }
