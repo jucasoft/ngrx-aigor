@@ -1,0 +1,35 @@
+$type-colors: (
+  string: #FF6B6B,
+  number: #009688,
+  boolean: #b938a4,
+  date: #05668D,
+
+  array: #999,
+  object: #999,
+  default: #999,
+  function: #999,
+
+  'null': #fff,
+  undefined: #fff
+);
+
+@each $type, $color in $type-colors {
+  .node-type-#{$type}{
+    color: $color;
+  }
+}
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content {
+  padding: 0;
+}
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler {
+  margin-right: 0.5rem;
+  width: 2rem;
+  height: 1rem;
+  color: #a6a6a6;
+  border: 0 none;
+  background: transparent;
+  border-radius: 50%;
+  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
