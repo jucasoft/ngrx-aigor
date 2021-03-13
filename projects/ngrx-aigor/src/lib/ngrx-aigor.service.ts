@@ -51,7 +51,7 @@ export class NgrxAigorService {
   public isPaused$: Observable<boolean>;
   public monacoActionData$: Observable<NgxEditorModel>;
   public monacoSelectedActionData$: Observable<{ stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] }, action: NgxEditorModel }>;
-  public monacoSelectedStateData$: Observable<NgxEditorModel>;
+  public selectedStateData$: Observable<any>;
   public monacoSelectedStateDifData$: Observable<{ modifiedModel: DiffEditorModel, originalModel: DiffEditorModel }>;
   public actionSelected$ = new BehaviorSubject(-1);
 
@@ -102,13 +102,13 @@ export class NgrxAigorService {
       )
     );
 
-    this.monacoSelectedStateData$ = this.actionSelected$.pipe(
+    this.selectedStateData$ = this.actionSelected$.pipe(
       withLatestFrom(this.computedStates$),
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;
         return evalData(() => computedStates[index].state, {});
       }),
-      toNgxEditorModel(),
+      // toNgxEditorModel(),
     );
 
     this.monacoSelectedStateDifData$ = this.actionSelected$.pipe(

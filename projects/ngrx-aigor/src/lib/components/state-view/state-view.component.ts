@@ -9,13 +9,16 @@ import {EditorComponent} from 'ngx-monaco-editor';
       <button pButton pRipple type="button" icon="pi pi-arrow-down" label="Fold" class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="fold()"></button>
       <button pButton pRipple type="button" icon="pi pi-arrow-up" label="Unfold" class="p-button-sm p-button-rounded p-button-text p-mr-1" (click)="unfold()"></button>
     </div>
-    <ngx-monaco-editor *ngLet="(aigorService.monacoSelectedStateData$ | async) as monacofData"
-                       #editorComponent
-                       [style]="{'width': '100%', 'height':'600px'}"
-                       [options]="editorOptions"
-                       [model]="monacofData"
-                       (onInit)="onInit($event, editorComponent)">
-    </ngx-monaco-editor>
+    <!--    <ngx-monaco-editor *ngLet="(aigorService.monacoSelectedStateData$ | async) as monacofData"-->
+    <!--                       #editorComponent-->
+    <!--                       [style]="{'width': '100%', 'height':'600px'}"-->
+    <!--                       [options]="editorOptions"-->
+    <!--                       [model]="monacofData"-->
+    <!--                       (onInit)="onInit($event, editorComponent)">-->
+    <!--    </ngx-monaco-editor>-->
+    <lib-json-tree *ngLet="(aigorService.monacoSelectedStateData$ | async) as data"
+                   [data]="data">
+    </lib-json-tree>
   `,
   styles: []
 })

@@ -21,9 +21,7 @@ import {TagModule} from 'primeng/tag';
 import {TreeModule} from 'primeng/tree';
 import {LifecycleViewComponent} from './components/lifecycle-view/lifecycle-view.component';
 import {MainComponent} from './components/main/main.component';
-import {NgxJsonViewerModule} from 'ngx-json-viewer';
 import {AceEditorModule} from 'ngx-ace-editor-wrapper';
-import { JsonTreeComponent } from './components/json-tree/json-tree.component';
 import {JsonTreeModule} from './components/json-tree/json-tree.module';
 
 @NgModule({

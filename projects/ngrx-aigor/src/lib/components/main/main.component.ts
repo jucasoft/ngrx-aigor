@@ -68,9 +68,9 @@ import {NgrxAigorService} from '../../ngrx-aigor.service';
 export class MainComponent implements OnInit {
 
   lifecycleView = false;
-  stateView = false;
+  stateView = true;
   diffView = false;
-  actionView = true;
+  actionView = false;
 
   ev;
 
