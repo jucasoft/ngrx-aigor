@@ -16,7 +16,7 @@ import {EditorComponent} from 'ngx-monaco-editor';
     <!--                       [model]="monacofData"-->
     <!--                       (onInit)="onInit($event, editorComponent)">-->
     <!--    </ngx-monaco-editor>-->
-    <lib-json-tree *ngLet="(aigorService.monacoSelectedStateData$ | async) as data"
+    <lib-json-tree *ngLet="(aigorService.selectedStateData$ | async) as data"
                    [data]="data">
     </lib-json-tree>
   `,

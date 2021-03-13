@@ -6,6 +6,7 @@ import {Component, ViewEncapsulation} from '@angular/core';
     <lib-ngrx-aigor-container></lib-ngrx-aigor-container>
   `,
   styles: [],
+  encapsulation: ViewEncapsulation.ShadowDom
 })
 export class NgrxAigorComponent {
 
