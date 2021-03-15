@@ -20,16 +20,24 @@ $type-colors: (
 }
 
 .p-tree .p-tree-container .p-treenode .p-treenode-content {
-  padding: 0;
+  padding: 0 !important;
 }
 
 .p-tree .p-tree-container .p-treenode .p-treenode-content .p-tree-toggler {
-  margin-right: 0.5rem;
-  width: 2rem;
-  height: 1rem;
-  color: #a6a6a6;
-  border: 0 none;
-  background: transparent;
-  border-radius: 50%;
-  transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  //margin-right: 0.5rem;
+  width: 1rem !important;
+  height: 1rem !important;
+  //color: #a6a6a6;
+  //border: 0 none;
+  //background: transparent;
+  //border-radius: 50%;
+  //transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.lib-ngrx-aigor .p-tree {
+  //border: 1px solid #3f4b5b;
+  //background: #2a323d;
+  //color: hsla(0,0%,100%,.87);
+  padding: 0 !important;
+  //border-radius: 4px;
 }

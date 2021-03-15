@@ -16,7 +16,7 @@ export class NgrxAigorComponent {
 @Component({
   selector: 'lib-ngrx-aigor-container',
   template: `
-    <lib-main></lib-main>
+    <lib-main class="lib-ngrx-aigor"></lib-main>
   `,
   styleUrls: ['ngrx-aigor.component.scss'],
   encapsulation: ViewEncapsulation.None

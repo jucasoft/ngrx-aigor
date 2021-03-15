@@ -39,7 +39,8 @@ export class HeaderComponent implements OnInit {
     const ref = this.dialogService.open(NgrxAigorComponent, {
       header: 'NGRX-AIGOR',
       width: '90%',
-      height: '90%'
+      height: '90%',
+      contentStyle: {padding: 0}
     });
   }
 

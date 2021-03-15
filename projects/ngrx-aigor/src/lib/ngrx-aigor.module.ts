@@ -5,7 +5,6 @@ import {OrderListModule} from 'primeng/orderlist';
 import {CommonModule} from '@angular/common';
 import {ListboxModule} from 'primeng/listbox';
 import {FormsModule} from '@angular/forms';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 import {ButtonModule} from 'primeng/button';
 import {SplitterModule} from 'primeng/splitter';
 import {NgLetModule} from './utils/ng-let.directive';
@@ -21,8 +20,8 @@ import {TagModule} from 'primeng/tag';
 import {TreeModule} from 'primeng/tree';
 import {LifecycleViewComponent} from './components/lifecycle-view/lifecycle-view.component';
 import {MainComponent} from './components/main/main.component';
-import {AceEditorModule} from 'ngx-ace-editor-wrapper';
 import {JsonTreeModule} from './components/json-tree/json-tree.module';
+import {JsonDeltaModule} from './components/json-delta/json-delta.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +39,6 @@ import {JsonTreeModule} from './components/json-tree/json-tree.module';
     CommonModule,
     ListboxModule,
     FormsModule,
-    MonacoEditorModule,
     ButtonModule,
     SplitterModule,
     NgLetModule,
@@ -50,8 +48,8 @@ import {JsonTreeModule} from './components/json-tree/json-tree.module';
     ClipboardModule,
     TagModule,
     TreeModule,
-    AceEditorModule,
-    JsonTreeModule
+    JsonTreeModule,
+    JsonDeltaModule,
   ],
   exports: [NgrxAigorComponent],
   providers: [NgrxAigorService]

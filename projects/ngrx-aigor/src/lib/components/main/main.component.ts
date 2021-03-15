@@ -17,36 +17,38 @@ import {NgrxAigorService} from '../../ngrx-aigor.service';
     <!--    <div>isPaused$: {{aigorService.isPaused$ | async}}</div>-->
     <!--    <div>actionSelected$: {{aigorService.actionSelected$ | async}}</div>-->
 
-    <div class="p-d-flex">
-      <div class="p-p-1">
-        <p-listbox *ngLet="(aigorService.actions$ | async) as actions"
-                   [options]="actions"
-                   optionLabel="id"
-                   [styleClass]="'h-100'"
-                   (onChange)="onChange($event, actions.indexOf($event.value))">
-          <ng-template let-item pTemplate="item" let-i="index">
-            <div class="p-d-flex p-jc-between w-100">
-              <div class="p-d-flex p-text-nowrap"><span>{{item.action.type}}</span></div>
-              <div class="p-d-flex p-ml-2">
-                <p-tag value="Jump" class="pointer p-mr-1 p-p-0" (click)="onJump(i)"></p-tag>
-                <p-tag value="Skip" class="pointer p-p-0" (click)="onSkip(i)"></p-tag>
+    <div class="p-panel">
+      <div class="p-d-flex p-panel p-panel-content">
+        <div class="p-p-1">
+          <p-listbox *ngLet="(aigorService.actions$ | async) as actions"
+                     [options]="actions"
+                     optionLabel="id"
+                     [styleClass]="'h-100'"
+                     (onChange)="onChange($event, actions.indexOf($event.value))">
+            <ng-template let-item pTemplate="item" let-i="index">
+              <div class="p-d-flex p-jc-between w-100">
+                <div class="p-d-flex p-text-nowrap"><span>{{item.action.type}}</span></div>
+                <div class="p-d-flex p-ml-2">
+                  <p-tag value="Jump" class="pointer p-mr-1 p-p-0" (click)="onJump(i)"></p-tag>
+                  <p-tag value="Skip" class="pointer p-p-0" (click)="onSkip(i)"></p-tag>
+                </div>
               </div>
-            </div>
-          </ng-template>
-        </p-listbox>
-      </div>
-      <div class="p-p-1 w-100">
-        <div class="p-buttonset p-p-1 p-mb-2 p-shadow-1">
-          <button pButton pRipple icon="pi pi-volume-up" label="action" class="p-button-sm p-button-text" (click)="action()"></button>
-          <button pButton pRipple icon="pi pi-volume-up" label="lifecycle" class="p-button-sm p-button-text" (click)="lifecycle()"></button>
-          <button pButton pRipple icon="pi pi-wallet" label="state" class="p-button-sm p-button-text" (click)="state()"></button>
-          <button pButton pRipple icon="pi pi-th-large" label="diff" class="p-button-sm p-button-text" (click)="diff()"></button>
+            </ng-template>
+          </p-listbox>
         </div>
-        <div class="p-buttonset p-p-1 p-shadow-1">
-          <lib-state-view *ngIf="stateView"></lib-state-view>
-          <lib-state-diff *ngIf="diffView"></lib-state-diff>
-          <lib-action-view *ngIf="actionView"></lib-action-view>
-          <lib-lifecycle-view *ngIf="lifecycleView"></lib-lifecycle-view>
+        <div class="p-p-1 w-100">
+          <div class="p-buttonset p-p-1 p-mb-2 p-shadow-1">
+            <button pButton pRipple icon="pi pi-volume-up" label="action" class="p-button-sm p-button-text" (click)="action()"></button>
+            <button pButton pRipple icon="pi pi-volume-up" label="lifecycle" class="p-button-sm p-button-text" (click)="lifecycle()"></button>
+            <button pButton pRipple icon="pi pi-wallet" label="state" class="p-button-sm p-button-text" (click)="state()"></button>
+            <button pButton pRipple icon="pi pi-th-large" label="diff" class="p-button-sm p-button-text" (click)="diff()"></button>
+          </div>
+          <div class="p-buttonset p-p-1 p-shadow-1">
+            <lib-state-view *ngIf="stateView"></lib-state-view>
+            <lib-state-diff *ngIf="diffView"></lib-state-diff>
+            <lib-action-view *ngIf="actionView"></lib-action-view>
+            <lib-lifecycle-view *ngIf="lifecycleView"></lib-lifecycle-view>
+          </div>
         </div>
       </div>
     </div>

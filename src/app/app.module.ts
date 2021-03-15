@@ -16,7 +16,6 @@ import {BreadcrumbModule} from '@components/breadcrumb/breadcrumb.module';
 import {ClickOutsideModule} from '@core/directive/click-outside-directive';
 import {CardModule} from 'primeng/card';
 import {NgrxAigorModule} from 'ngrx-aigor';
-import {MonacoEditorModule} from 'ngx-monaco-editor';
 
 @NgModule({
   declarations: [
@@ -37,8 +36,7 @@ import {MonacoEditorModule} from 'ngx-monaco-editor';
     BreadcrumbModule,
     ClickOutsideModule,
     CardModule,
-    NgrxAigorModule,
-    MonacoEditorModule.forRoot()
+    NgrxAigorModule
   ],
   providers: [ConfirmationService],
   bootstrap: [AppComponent]

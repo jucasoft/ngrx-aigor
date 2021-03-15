@@ -1,0 +1,45 @@
+.node-before-label{
+  padding: 2px 3px;
+  border-radius: 3px;
+  position: relative;
+  color: #FFFFFF;
+
+  text-decoration: line-through;
+  background-color: rgba(251, 159 ,177, 0.4);
+}
+
+.node-after-label{
+  padding: 2px 3px;
+  border-radius: 3px;
+  position: relative;
+  color: #FFFFFF;
+
+  background-color: rgba(161, 198 ,89, 0.4);
+}
+
+.node-deleted-label{
+  padding: 2px 3px;
+  border-radius: 3px;
+  position: relative;
+  color: #FFFFFF;
+
+  background-color: rgba(161, 198 ,89, 0.4);
+}
+
+.node-created-label{
+  padding: 2px 3px;
+  border-radius: 3px;
+  position: relative;
+  color: #FFFFFF;
+
+  background-color: rgba(161, 198 ,89, 0.4);
+}
+
+.node-chaged-label{
+  padding: 2px 3px;
+  border-radius: 3px;
+  position: relative;
+  color: #FFFFFF;
+
+  background-color: rgba(161, 198 ,89, 0.4);
+}

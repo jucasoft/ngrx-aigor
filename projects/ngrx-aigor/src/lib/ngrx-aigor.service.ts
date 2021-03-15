@@ -3,10 +3,8 @@ import {StoreDevtools} from '@ngrx/store-devtools';
 import {distinctUntilChanged, map, withLatestFrom} from 'rxjs/operators';
 import {ComputedState, LiftedAction, LiftedActions} from '@ngrx/store-devtools/src/reducer';
 import {BehaviorSubject, MonoTypeOperatorFunction, Observable, pipe} from 'rxjs';
-import {DiffEditorModel, NgxEditorModel} from 'ngx-monaco-editor';
 import {evalData} from './utils/j-utils';
 import {Action, Store} from '@ngrx/store';
-import {StackFrame} from './model/vo/stack-frame';
 
 const mySelect = (keySelector: (x: any) => any): MonoTypeOperatorFunction<any> => {
   return pipe(
@@ -49,16 +47,13 @@ export class NgrxAigorService {
   public computedStates$: Observable<ComputedState[]>;
   public isLocked$: Observable<boolean>;
   public isPaused$: Observable<boolean>;
-  public monacoActionData$: Observable<NgxEditorModel>;
-  public monacoSelectedActionData$: Observable<{ stackframeMap: { dispatch: StackFrame, ofType: StackFrame[] }, action: NgxEditorModel }>;
+  public selectedActionData$: Observable<any>;
   public selectedStateData$: Observable<any>;
-  public monacoSelectedStateDifData$: Observable<{ modifiedModel: DiffEditorModel, originalModel: DiffEditorModel }>;
+  public diffData$: Observable<{ modified: any, original: any }>;
   public actionSelected$ = new BehaviorSubject(-1);
 
 
   constructor(private storeDevtools: StoreDevtools, private store$: Store) {
-    // const dispatch = store$.dispatch;
-    // store$.dispatch = new Proxy(dispatch, applyHandlerActionDecorator);
 
     this.monitorState$ = storeDevtools.liftedState.pipe(mySelect(x => x.monitorState));
     this.nextActionId$ = storeDevtools.liftedState.pipe(mySelect(x => x.nextActionId));
@@ -83,23 +78,13 @@ export class NgrxAigorService {
       map(([ids, entities]): any => ids.map((id) => ({...entities[id], id})))
     );
 
-    this.monacoActionData$ = this.actions$.pipe(toNgxEditorModel());
-
-    this.monacoSelectedActionData$ = this.actionSelected$.pipe(
+    this.selectedActionData$ = this.actionSelected$.pipe(
       withLatestFrom(this.actions$),
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;
         const action = evalData(() => computedStates[index].action, {});
-        return {action, stackframeMap: (action as any).stackframeMap};
-      }),
-      map(({action, stackframeMap}) => {
-          // console.log('stackB', stackB);
-          return {
-            stackframeMap,
-            action: {value: JSON.stringify(action, null, 2), language: 'json', uri: undefined}
-          };
-        }
-      )
+        return action;
+      })
     );
 
     this.selectedStateData$ = this.actionSelected$.pipe(
@@ -111,16 +96,15 @@ export class NgrxAigorService {
       // toNgxEditorModel(),
     );
 
-    this.monacoSelectedStateDifData$ = this.actionSelected$.pipe(
+    this.diffData$ = this.actionSelected$.pipe(
       withLatestFrom(this.computedStates$),
       map(([currentStateIndex, computedStates]) => {
         const index = currentStateIndex === -1 ? computedStates.length - 1 : currentStateIndex;
         const indexA = index === 0 ? 0 : index - 1;
-        const resultA = evalData(() => computedStates[indexA].state, {});
-        const resultB = evalData(() => computedStates[index].state, {});
-        return [resultA, resultB];
-      }),
-      toDiffEditorModel(),
+        const original = evalData(() => computedStates[indexA].state, {});
+        const modified = evalData(() => computedStates[index].state, {});
+        return {modified, original};
+      })
     );
   }
 
