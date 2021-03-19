@@ -15,7 +15,6 @@ import {TabViewModule} from 'primeng/tabview';
 import {ActionViewComponent} from './components/action-view/action-view.component';
 import {StackResolverComponent} from './components/stack-resolver/stack-resolver.component';
 import {RippleModule} from 'primeng/ripple';
-import {ClipboardModule} from '@angular/cdk/clipboard';
 import {TagModule} from 'primeng/tag';
 import {TreeModule} from 'primeng/tree';
 import {LifecycleViewComponent} from './components/lifecycle-view/lifecycle-view.component';
@@ -45,7 +44,6 @@ import {JsonDeltaModule} from './components/json-delta/json-delta.module';
     CheckboxModule,
     TabViewModule,
     RippleModule,
-    ClipboardModule,
     TagModule,
     TreeModule,
     JsonTreeModule,

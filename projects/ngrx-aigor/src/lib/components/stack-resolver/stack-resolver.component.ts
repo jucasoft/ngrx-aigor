@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Clipboard} from '@angular/cdk/clipboard';
 import {renderStackFrame, StackframeMap} from '../../utils/aigor-proxy';
 import {TreeNode} from 'primeng/api';
 import {StackFrame} from '../../model/vo/stack-frame';
@@ -50,7 +49,7 @@ export class StackResolverComponent implements OnInit {
 
   treeNode: TreeNode[];
 
-  constructor(private clipboard: Clipboard) {
+  constructor() {
   }
 
   getRoot(storeDispatch: StackFrame, effectDispatch: StackFrame): TreeNode {
@@ -87,7 +86,6 @@ export class StackResolverComponent implements OnInit {
         const {columnNumber, lineNumber, fileName, functionName} = res;
         const link = renderStackFrame({columnNumber, lineNumber, fileName: fileName.replace('webpack:///', 'webpack:///./')});
         console.log(`generated and copied to the clipboard`, link);
-        // this.clipboard.copy(link.replace('webpack:///./', ''));
       },
       err => {
         console.log('err', err);
