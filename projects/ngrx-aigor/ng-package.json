@@ -3,5 +3,15 @@
   "dest": "../../dist/ngrx-aigor",
   "lib": {
     "entryFile": "src/public-api.ts"
-  }
+  },
+  "whitelistedNonPeerDependencies": [
+    "moment",
+    "primeflex",
+    "primeicons",
+    "primeng",
+    "stacktrace-gps",
+    "stacktrace-parser",
+    "@ngrx/effects",
+    "@angular/cdk/clipboard"
+  ]
 }
